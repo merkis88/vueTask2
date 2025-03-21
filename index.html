@@ -1,16 +1,44 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Простые заметки</title>
-  <link rel="stylesheet" href="css/main.css">
-  <script defer src="js/vue.min.js"></script>
-  <script defer src="js/main.js"></script>
-</head>
 <body>
-  <div id="app">
-   
-  </div>
-</body>
-</html>
+    <div id="app">
+      <h1>Заметки</h1>
+      <div class="columns">
+
+        <div v-if="showModal" class="modal-overlay">
+          <div class="modal">
+            <h2>Добавить карточку</h2>
+            <label>
+              Название:
+              <input type="text" v-model="newCardTitle">
+            </label>
+            <label>
+              Задача 1:
+              <input type="text" v-model="newCardTasks[0]">
+            </label>
+            <label>
+              Задача 2:
+              <input type="text" v-model="newCardTasks[1]">
+            </label>
+            <label>
+              Задача 3:
+              <input type="text" v-model="newCardTasks[2]">
+            </label>
+            <div class="modal-buttons">
+              <button @click="saveNewCard">Сохранить</button>
+              <button @click="closeModal">Отмена</button>
+            </div>
+          </div>
+        </div>
+  
+        <column 
+          v-for="(column, index) in columns"
+          :key="index"
+          :column="column"
+          :column-index="index"
+          :is-first-column-blocked="isFirstColumnBlocked && index === 0"
+          @add-card="addCard"
+          @toggle-task="toggleTask"
+        ></column>
+      </div>
+    </div>
+  </body>
+  

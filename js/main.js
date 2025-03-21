@@ -43,7 +43,36 @@ Vue.component('column', {
       onTaskToggle() {
         this.$emit('toggle-task', this.columnIndex, this.cardIndex);
       }
-    }
+    },
+    methods: {
+        toggleTask(columnIndex, cardIndex) {
+          const card = this.columns[columnIndex].cards[cardIndex];
+          const completedCount = card.tasks.filter(task => task.completed).length;
+          const progress = completedCount / card.tasks.length;
+      
+          if (columnIndex === 0 && progress > 0.5 && this.columns[1].cards.length < 5) {
+            this.moveCard(columnIndex, cardIndex, 1);
+          } 
+          else if (progress === 1 && columnIndex !== 2) {
+            this.moveCard(columnIndex, cardIndex, 2);
+          } 
+          else if (columnIndex === 1 && progress < 0.5) {
+            this.moveCard(columnIndex, cardIndex, 0);
+          } 
+          else if (columnIndex === 2 && progress < 1 && this.columns[1].cards.length < 5) {
+            this.moveCard(columnIndex, cardIndex, 1);
+          }
+          this.saveData();
+        },
+        moveCard(fromColumn, cardIndex, toColumn) {
+          const card = this.columns[fromColumn].cards.splice(cardIndex, 1)[0];
+          this.columns[toColumn].cards.push(card);
+        },
+        saveData() {
+          localStorage.setItem("columns", JSON.stringify(this.columns));
+        }
+      }
+      
   });
   
   
