@@ -19,6 +19,33 @@ Vue.component('column', {
       }
     }
   });
+
+  Vue.component('card-component', {
+    props: {
+      card: { required: true },
+      cardIndex: { required: true },
+      columnIndex: { required: true }
+    },
+    template: `
+      <div class="card">
+        <h3>{{ card.title }}</h3>
+        <ul>
+          <li v-for="(task, index) in card.tasks" :key="index">
+            <label>
+              <input type="checkbox" v-model="task.completed" @change="onTaskToggle">
+              {{ task.text }}
+            </label>
+          </li>
+        </ul>
+      </div>
+    `,
+    methods: {
+      onTaskToggle() {
+        this.$emit('toggle-task', this.columnIndex, this.cardIndex);
+      }
+    }
+  });
+  
   
   const app = new Vue({
     el: '#app',
