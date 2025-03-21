@@ -99,12 +99,38 @@ Vue.component('column', {
             { title: "Выполняются", cards: [] },
             { title: "Завершенные", cards: [] }
           ],
-          showModal: false,         
-          modalColumnIndex: null,   
-          newCardTitle: "",         
-          newCardTasks: ["", "", ""] 
-        };
-      },
-      
+          methods: {
+            addCard(columnIndex) {
+              this.modalColumnIndex = columnIndex;
+              this.newCardTitle = "";
+              this.newCardTasks = ["", "", ""];
+              this.showModal = true;
+            },
+            closeModal() {
+              this.showModal = false;
+            },
+            saveNewCard() {
+              if (!this.newCardTitle.trim()) {
+                alert("Введите название карточки.");
+                return;
+              }
+              const tasks = this.newCardTasks.map(task => task.trim());
+              if (tasks.some(task => !task) || tasks.length !== 3) {
+                alert("Заполните все 3 задачи.");
+                return;
+              }
+              const newCard = {
+                id: Date.now(),
+                title: this.newCardTitle.trim(),
+                tasks: tasks.map(text => ({ text, completed: false }))
+              };
+              this.columns[this.modalColumnIndex].cards.push(newCard);
+              this.saveData();
+              this.showModal = false;
+            }
+          }
+          
+      }
+    }
   });
   
