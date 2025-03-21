@@ -51,12 +51,17 @@ Vue.component('column', {
     el: '#app',
     data() {
       return {
-        columns: [
+        columns: JSON.parse(localStorage.getItem("columns")) || [
           { title: "Новые", cards: [] },
           { title: "Выполняются", cards: [] },
           { title: "Завершенные", cards: [] }
         ]
       };
+    },
+    computed: {
+      isFirstColumnBlocked() {
+        return this.columns[1].cards.length >= 5;
+      }
     }
   });
   
