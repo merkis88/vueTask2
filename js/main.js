@@ -91,6 +91,20 @@ Vue.component('column', {
       isFirstColumnBlocked() {
         return this.columns[1].cards.length >= 5;
       }
-    }
+    }, 
+    data() {
+        return {
+          columns: JSON.parse(localStorage.getItem("columns")) || [
+            { title: "Новые", cards: [] },
+            { title: "Выполняются", cards: [] },
+            { title: "Завершенные", cards: [] }
+          ],
+          showModal: false,         
+          modalColumnIndex: null,   
+          newCardTitle: "",         
+          newCardTasks: ["", "", ""] 
+        };
+      },
+      
   });
   
